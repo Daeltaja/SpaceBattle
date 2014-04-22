@@ -225,7 +225,7 @@ class Tonemapping extends PostEffectsBase {
 			Graphics.Blit (source, destination, tonemapMaterial, 10); 		
 		}
 		else {
-			Debug.LogError ("No valid adaptive tonemapper type found!");
+		//	Error ("No valid adaptive tonemapper type found!");
 			Graphics.Blit (source, destination); // at least we get the TransformToLDR effect
 		}
 			

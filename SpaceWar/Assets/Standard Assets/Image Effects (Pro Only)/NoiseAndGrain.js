@@ -55,7 +55,7 @@ class NoiseAndGrain extends PostEffectsBase {
 		if(CheckResources()==false || (null==noiseTexture)) {
 			Graphics.Blit (source, destination);
 			if(null==noiseTexture){	
-				Debug.LogWarning("Noise & Grain effect failing as noise texture is not assigned. please assign.", transform);
+				//Warning("Noise & Grain effect failing as noise texture is not assigned. please assign.", transform);
 			}
 			return;
 		}

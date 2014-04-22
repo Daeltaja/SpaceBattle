@@ -1,13 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using BGE.Geom;
 
-class Laser : MonoBehaviour
+namespace BGE.States
 {
-	public void Update()
+	class Laser : MonoBehaviour
 	{
-		float speed = 5.0f;
+		GameManager gm;
+		float speed = 45.0f;
 
-		transform.position += transform.forward * speed;
-		Debug.DrawLine(transform.position, transform.position + transform.forward * 10.0f, Color.red);
+		void Start()
+		{
+			this.name = "LaserAlly";
+			gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+			gm.entities.Add(this.gameObject);
+		}
+
+		void Update()
+		{
+			transform.position += transform.forward * speed * Time.deltaTime;
+		}
 	}
 }

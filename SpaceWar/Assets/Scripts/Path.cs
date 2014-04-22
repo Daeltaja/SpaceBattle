@@ -4,73 +4,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
-
-public class Path
+namespace BGE
 {
-    private List<Vector3> waypoints = new List<Vector3>();
-    private int next = 0;
-    public bool draw;
+	public class Path 
+	{
+		public List<Vector3> waypoints = new List<Vector3>(); //list to hold 
+		public int currWaypoint = 0; //current waypoint that will be iterated through
+		bool looped = true;
 
-    public int Next
-    {
-        get { return next; }
-        set { next = value; }
-    }
+		public void CreatePath(int points, float radius)
+		{
+			float thetaInc = Mathf.PI / points * 2; 
+			float lastX = 0; //holds last xPos
+			float lastZ = radius; //z pos is always equal to radius (10f)
+			
+			for (int i = 0 ; i <= points ; i++) //loop for the points creation
+			{
+				float currentX; 
+				float currentZ;
+				float theta = (float) i * thetaInc; 
+				
+				currentX = Mathf.Sin(theta) * (radius); //calculating X position on edge of circle
+				currentZ = Mathf.Cos(theta) * (radius); //calculating X position on edge of circle
+				
+				lastX = currentX; //update last to current
+				lastZ = currentZ; //update last to current
+				
+				Vector3 newPos = new Vector3(lastX, 0, lastZ); //new position storing lastX and lastZ
+				waypoints.Add(newPos); //stores the new Pos in waypoint list for line drawing
+			}
+		}
 
-    public List<Vector3> Waypoints
-    {
-        get { return waypoints; }
-        set { waypoints = value; }
-    }
+		public void DrawPath()
+		{
+			for(int i = 0; i < waypoints.Count-1; i++)
+			{
+				Debug.DrawLine (waypoints[i], waypoints[i+1], Color.magenta );
+			}
+		}
 
-    private bool looped;
+		public Vector3 NextWaypoint()
+		{
+			return waypoints[currWaypoint];
+		}
 
-
-    public bool Looped
-    {
-        get { return looped; }
-        set { looped = value; }
-    }
-
-    public void Draw()
-    {
-        if (draw)
-        {
-            for (int i = 1; i < waypoints.Count(); i++)
-            {
-                Debug.DrawLine(waypoints[i - 1], waypoints[i], Color.cyan);
-            }
-            if (looped && (waypoints.Count() > 0))
-            {
-                Debug.DrawLine(waypoints[0], waypoints[waypoints.Count() - 1], Color.cyan);
-            }
-        }
-    }
-
-    public Vector3 NextWaypoint()
-    {
-        return waypoints[next];
-    }
-
-    public bool IsLast()
-    {
-        return (next == waypoints.Count() - 1);
-    }
-
-    public void AdvanceToNext()
-    {
-        if (looped)
-        {
-            next = (next + 1) % waypoints.Count();
-        }
-        else
-        {
-            if (next != waypoints.Count() - 1)
-            {
-                next = next + 1;
-            }
-        }
-    }
+		public void AdvanceToNext()
+		{
+			if (looped)
+			{
+				currWaypoint = (currWaypoint + 1) % waypoints.Count();
+			}
+			else
+			{
+				if (currWaypoint != waypoints.Count() - 1)
+				{
+					currWaypoint = currWaypoint + 1;
+				}
+			}
+		}
+	}
 }
-

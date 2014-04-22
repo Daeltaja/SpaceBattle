@@ -10,7 +10,7 @@ class PostEffectsHelper extends MonoBehaviour
 	
 	
 	function OnRenderImage (source : RenderTexture, destination : RenderTexture) {
-		Debug.Log("OnRenderImage in Helper called ...");
+	//	("OnRenderImage in Helper called ...");
 	}
 	
 	static function DrawLowLevelPlaneAlignedWithCamera(

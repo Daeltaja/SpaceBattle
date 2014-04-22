@@ -1,53 +1,72 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-public class ChaseState : State
+namespace BGE.States
 {
-	GameObject enemyGameObject;
-	float shootTime = 0.25f;
-	
-	public override string Description()
+	public class ChaseState : State
 	{
-		return "Chase State";
-	}
-	
-	public ChaseState(GameObject myGameObject, GameObject enemyGameObject) : base(myGameObject)
-	{
-		this.enemyGameObject = enemyGameObject;
-	}
-	
-	public override void Enter()
-	{
-		myGameObject.GetComponent<SteeringBehaviours>().DisableAll();
-		myGameObject.GetComponent<SteeringBehaviours>().offsetPursuitEnabled = true;
-		myGameObject.GetComponent<SteeringBehaviours>().offsetPursuitTarget = enemyGameObject;
-		myGameObject.GetComponent<SteeringBehaviours>().maxSpeed += 2f;
-	}
-	
-	public override void Exit()
-	{
+		GameObject enemyGameObject;
+		float shootTime = 0.25f;
 		
-	}
-	
-	public override void Update()
-	{
-		shootTime += Time.deltaTime;
-		float fov = Mathf.PI / 4.0f;
-		float angle;
-		Vector3 toEnemy = (enemyGameObject.transform.position - myGameObject.transform.position);
-		toEnemy.Normalize();
-		angle = (float) Mathf.Acos(Vector3.Dot(toEnemy, myGameObject.transform.forward));
-
-		if (angle < fov)
+		public override string Description()
 		{
-			if (shootTime > 0.25f)
+			return "Chase State";
+		}
+		
+		public ChaseState(GameObject myGameObject, GameObject enemyGameObject) : base(myGameObject)
+		{
+			this.enemyGameObject = enemyGameObject;
+		}
+		
+		public override void Enter()
+		{
+			myGameObject.GetComponent<SteeringBehaviours>().DisableAll();
+			myGameObject.GetComponent<SteeringBehaviours>().offsetPursuitEnabled = true;
+			myGameObject.GetComponent<SteeringBehaviours>().offsetPursuitTarget = enemyGameObject;
+			myGameObject.GetComponent<SteeringBehaviours>().maxSpeed += 2f;
+		}
+		
+		public override void Exit()
+		{
+			
+		}
+		
+		public override void Update()
+		{
+			if(enemyGameObject == null)
 			{
-				GameObject laser = new GameObject();
-				laser.AddComponent<Laser>();
-				laser.transform.position = myGameObject.transform.position;
-				laser.transform.forward = myGameObject.transform.forward;
-				shootTime = 0.0f;
+				enemyGameObject = GameObject.Find ("EnemyForce");
+				myGameObject.GetComponent<StateMachine>().SwitchState(new AlertState(myGameObject, enemyGameObject));
 			}
+			shootTime += Time.deltaTime;
+			float fov = Mathf.PI / 4.0f;
+			float angle;
+			Vector3 toEnemy = (enemyGameObject.transform.position - myGameObject.transform.position);
+			toEnemy.Normalize();
+			angle = (float) Mathf.Acos(Vector3.Dot(toEnemy, myGameObject.transform.forward));
+
+			if (angle < fov)
+			{
+				if (shootTime > 0.25f)
+				{
+					if(myGameObject.name.Contains("Ally"))
+					{
+						GameObject laserGO = GameObject.Find ("LaserAlly");
+						GameObject laser = MonoBehaviour.Instantiate(laserGO, myGameObject.transform.position, Quaternion.identity)as GameObject;
+						laser.transform.position = myGameObject.transform.position;
+						laser.transform.forward = myGameObject.transform.forward;
+						shootTime = 0.0f;
+					}
+					else if(myGameObject.name.Contains("Enemy"))
+					{
+						GameObject laserGO = GameObject.Find ("LaserEnemy");
+						GameObject laser = MonoBehaviour.Instantiate(laserGO, myGameObject.transform.position, Quaternion.identity)as GameObject;
+						laser.transform.position = myGameObject.transform.position;
+						laser.transform.forward = myGameObject.transform.forward;
+						shootTime = 0.0f;
+					}
+				}
+			}
+
 		}
 	}
 }

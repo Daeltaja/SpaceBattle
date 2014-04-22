@@ -1,19 +1,22 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class State
+namespace BGE.States
 {
-	protected GameObject myGameObject;
-	
-	public State(GameObject myGameObject)
+	public abstract class State 
 	{
-		this.myGameObject = myGameObject;
+		protected GameObject myGameObject;
+		
+		public State(GameObject myGameObject)
+		{
+			this.myGameObject = myGameObject;
+		}
+		
+		public abstract string Description();
+		
+		public abstract void Enter();
+		public abstract void Exit();
+		
+		public abstract void Update();
 	}
-	
-	public abstract string Description();
-	
-	public abstract void Enter();
-	public abstract void Exit();
-	
-	public abstract void Update();
 }

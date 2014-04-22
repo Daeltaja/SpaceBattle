@@ -1,30 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 
-public class StateMachine : MonoBehaviour
+namespace BGE.States
 {
-	State currentState;
-	
-	public void Update()
+	public class StateMachine : MonoBehaviour
 	{
-		if (currentState != null)
+		State currentState;
+		
+		public void Update()
 		{
-			Debug.Log("Current state: " + currentState.Description());
-			currentState.Update();
-		}
-	}
-	
-	public void SwitchState(State newState)
-	{
-		if (currentState != null)
-		{
-			currentState.Exit();
+			if (currentState != null)
+			{
+				currentState.Update();
+			}
 		}
 		
-		currentState = newState;
-		if (newState != null)
+		public void SwitchState(State newState)
 		{
-			currentState.Enter();
+			if (currentState != null)
+			{
+				currentState.Exit();
+			}
+			
+			currentState = newState;
+			if (newState != null)
+			{
+				currentState.Enter();
+			}
 		}
 	}
 }

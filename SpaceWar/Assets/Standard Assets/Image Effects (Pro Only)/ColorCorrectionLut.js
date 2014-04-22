@@ -75,7 +75,7 @@ public class ColorCorrectionLut extends PostEffectsBase
 			dim = temp2DTex.height;
 
 			if (!ValidDimensions(temp2DTex)) {
-				Debug.LogWarning ("The given 2D texture " + temp2DTex.name + " cannot be used as a 3D LUT.");				
+			//	Warning ("The given 2D texture " + temp2DTex.name + " cannot be used as a 3D LUT.");				
 				basedOnTempTex = "";
 				return;				
 			}
@@ -101,7 +101,7 @@ public class ColorCorrectionLut extends PostEffectsBase
 		}		
 		else {
 			// error, something went terribly wrong
-			Debug.LogError ("Couldn't color correct with 3D LUT texture. Image Effect will be disabled.");
+		//	Error ("Couldn't color correct with 3D LUT texture. Image Effect will be disabled.");
 		}		
 	}
 
